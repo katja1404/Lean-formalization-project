@@ -118,29 +118,73 @@ lemma two_n_minus_n_plus_one_eq_n_minus_one (n : ℕ) :
 2 * n - (n + 1) = n - 1 := by
 omega
 
-lemma one_over_n_minus_one_factorial_eq_n_over_n_factorial (n : ℕ) :
+lemma one_over_n_minus_one_factorial_eq_n_over_n_factorial (n : ℕ) (h : n > 0) :
 1 / Nat.factorial (n - 1) = n / Nat.factorial n := by
+apply Nat.div_eq_of_eq_mul_right
+apply Nat.factorial_pos
+-- rw [← mul_div_assoc] -- zakaj to ne dela? Če uporabimo spodnjo, dobimo še pogoj n! | n ...
+rw [← Nat.mul_div_assoc]
+rw [mul_comm, Nat.mul_factorial_pred]
+rw [Nat.div_self]
+apply Nat.factorial_pos
+apply h
 sorry
 
-lemma equality (n : ℕ):
+-- tole je samo kot helper: če se nam v equality rata znebit imenovalcev
+lemma no_denoms (n : ℕ) (h : n > 0) :
+Nat.factorial (2 * n) * (n + 1) * Nat.factorial n * Nat.factorial n = n * Nat.factorial (2 * n) * Nat.factorial (n - 1) * Nat.factorial (n + 1) := by
+rw [mul_comm n (Nat.factorial (2 * n))]
+rw [mul_assoc, mul_assoc, ← mul_assoc (n + 1)]
+rw [← Nat.factorial_succ]
+rw [mul_assoc, mul_assoc, ← mul_assoc n]
+rw [Nat.mul_factorial_pred]
+rw [mul_comm (Nat.factorial n) (Nat.factorial (n + 1))]
+apply h
+
+
+variable (m : ℕ)
+#eval (λ (m : ℕ) => (m / (m - 1))) 10
+
+
+lemma equality (n : ℕ) (h : n > 0):
 Nat.choose (2 * n) (n + 1) = n / (n + 1) * Nat.choose (2 * n) n := by
 rw [Nat.choose_eq_factorial_div_factorial, Nat.choose_eq_factorial_div_factorial]
 rw [two_n_minus_n_eq_n, two_n_minus_n_plus_one_eq_n_minus_one]
 apply Nat.div_eq_of_eq_mul_right
-sorry
+apply Nat.mul_pos
+apply Nat.factorial_pos
+apply Nat.factorial_pos
+rw [Nat.factorial_succ]
 rw [← mul_assoc]
-apply Nat.eq_mul_of_div_eq_left
+nth_rw 2 [mul_assoc]
+rw [mul_comm (Nat.factorial (n - 1)) (n / (n + 1))]
+rw [← mul_assoc]
+rw [mul_assoc (n + 1) (Nat.factorial n) (n / (n + 1))]
+rw [mul_comm (Nat.factorial n) (n / (n + 1))]
+rw [← mul_assoc]
+rw [mul_assoc, mul_assoc]
+sorry -- res nm je žou
+omega
+omega
+
+
+lemma a (n : ℕ) :
+2 * n = (1 + 1) * n := by
+apply Nat.eq_of_mul_eq_mul_right
 
 
 
+-- rešimo za n>0
+theorem n_plus_one_divides_2n_choose_n_non_zero (n : Nat) (h : n > 0) :
+n + 1 ∣ Nat.choose (2 * n) n := by sorry
 
 
-
-
-
-
-
-
-theorem n_plus_one_divides_2n_choose_n (n : ℕ) :
+-- razdelimo na 0 in succ: 0 je obv, n>0 pa rabimo kot predpostavko za naprej
+theorem n_plus_one_divides_2n_choose_n (n : Nat) :
 n + 1 ∣ Nat.choose (2 * n) n := by
-sorry
+match n with
+  | 0 =>
+    omega
+  | Nat.succ k =>
+    apply n_plus_one_divides_2n_choose_n_non_zero (Nat.succ k)
+    exact Nat.zero_lt_succ k
