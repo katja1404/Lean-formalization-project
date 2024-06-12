@@ -250,23 +250,23 @@ def rotating_iso : full_binary_tree ≃ plane_tree :=
       -- exact IH_T2,
       sorry
   right_inv := by
-    intro p -- plane_tree_of_full_binary_tree (full_binary_tree_of_plane_tree p) = p
-    induction p with -- we got stuck with this issue but tried to prove it theoretically
-    | node branches =>
-      cases branches with
-      | nil => rw [full_binary_tree_of_leaf, plane_tree_of_full_binary_tree]
-      | cons left rights =>
-        cases rights with
-        | nil => rw [full_binary_tree_of_plane_tree, plane_tree_of_full_binary_tree]
-        | cons right rights =>
-          cases rights with
-          | nil =>
-            rw [full_binary_tree_of_plane_tree, plane_tree_of_full_binary_tree, full_binary_tree_of_cons]
-            simp
-          | cons _ _ =>
-            have h : full_binary_tree_of_plane_tree (plane_tree.node (left :: right :: rights)) =
-              full_binary_tree.node₂ (full_binary_tree_of_plane_tree left)
-              (full_binary_tree_of_plane_tree (plane_tree.node (right :: rights))) :=
-                by rw [full_binary_tree_of_cons]
-            rw [h]
-            simp }
+    -- intro p -- plane_tree_of_full_binary_tree (full_binary_tree_of_plane_tree p) = p
+    -- induction p with -- we got stuck with this issue but tried to prove it theoretically
+    -- | node branches =>
+    --   cases branches with
+    --   | nil => rw [full_binary_tree_of_leaf, plane_tree_of_full_binary_tree]
+    --   | cons left rights =>
+    --     cases rights with
+    --     | nil => rw [full_binary_tree_of_plane_tree, plane_tree_of_full_binary_tree]
+    --     | cons right rights =>
+    --       cases rights with
+    --       | nil =>
+    --         rw [full_binary_tree_of_plane_tree, plane_tree_of_full_binary_tree, full_binary_tree_of_cons]
+    --         simp
+    --       | cons _ _ =>
+    --         have h : full_binary_tree_of_plane_tree (plane_tree.node (left :: right :: rights)) =
+    --           full_binary_tree.node₂ (full_binary_tree_of_plane_tree left)
+    --           (full_binary_tree_of_plane_tree (plane_tree.node (right :: rights))) :=
+    --             by rw [full_binary_tree_of_cons]
+    --         rw [h]
+             sorry }
