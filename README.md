@@ -7,3 +7,5 @@ Formalized tasks:
 - Large task 4
 - Large task 6
 - Large task 5
+
+All tasks are formalized in file Project.lean.
